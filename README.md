@@ -11,7 +11,7 @@ together in at least one movie
 ### Todo
 - [ ] Get familiar :) w/ dataset
 - [ ] Clean the excel
-  - [ ] Remove incomplete lines
+  - [ ] Bonus: Remove incomplete lines w/ Python
   - [ ] movie_title remove Â (last char) 
   - [ ] imdb_score (currently 7.9 = 7.syyskuuta)
   - [ ] Aspect_ratio
@@ -22,4 +22,5 @@ together in at least one movie
 
 ### Done ✓
 
-- [x] 13/4/22 meeting   
+- [✓] 13/4/22 meeting   
+- [✓] Remove incomplete lines

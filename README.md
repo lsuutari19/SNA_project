@@ -66,3 +66,4 @@ your finding.
 
 - [✓] 13/4/22 meeting   
 - [✓] Remove incomplete lines
+- [✓] Removed the odd characters at the end of movie titles

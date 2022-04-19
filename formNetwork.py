@@ -9,7 +9,7 @@ import pandas as pd
 TO DO:
     - Debugging
     - checking that the values are correct (can be done by reducing sheet.nrows = 5 and manually calculating
-        - for example the average centralities are currently done wrong
+        - for example the degree centrality max is smaller than min?
     - save in a file all the centralities and draw the degree distributions (instructions 3-5)
 
 """
@@ -36,7 +36,7 @@ for row in range(1, sheet.nrows):
 #nx.draw(G, with_labels=True)
 #plt.show()
 
-print("Hello World!")
+print("Starting calculations!")
 
 
 #writing the wanted information into results.txt
@@ -78,18 +78,18 @@ with open('results.txt', 'w') as f:
 
     #eigenvector centralities in order of max, avg, min
     eigvec_cent = nx.eigenvector_centrality(G)
-    f.write("maximum eigenvector centrality: " + str(min(eigvec_cent)) + " " + str(eigvec_cent.get(min(eigvec_cent))) + "\n")
+    f.write("maximum eigenvector centrality: " + str(max(eigvec_cent)) + " " + str(eigvec_cent.get(max(eigvec_cent))) + "\n")
 
     avg_eigvec_cent = sum(eigvec_cent.values()) / len(eigvec_cent)
     f.write("average eigenvector centrality: " + str(avg_eigvec_cent) + "\n")
 
-    f.write("minimum eigenvector centrality: " + str(max(eigvec_cent)) + " " + str(eigvec_cent.get(max(eigvec_cent))) + "\n\n")
+    f.write("minimum eigenvector centrality: " + str(min(eigvec_cent)) + " " + str(eigvec_cent.get(min(eigvec_cent))) + "\n\n")
     
     #betweenness centralities in order of max, avg, min
     betw_cent = nx.betweenness_centrality(G)
-    f.write("maximum betweenness centrality: " + str(min(betw_cent)) + " " + str(betw_cent.get(min(betw_cent))) + "\n")
+    f.write("maximum betweenness centrality: " + str(max(betw_cent)) + " " + str(betw_cent.get(max(betw_cent))) + "\n")
 
     avg_betw_cent = sum(betw_cent.values()) / len(betw_cent)
     f.write("average betweenness centrality: " + str(avg_betw_cent) + "\n")
 
-    f.write("minimum betweenness centrality: " + str(max(betw_cent)) + " " + str(betw_cent.get(max(betw_cent))) + "\n\n")
+    f.write("minimum betweenness centrality: " + str(min(betw_cent)) + " " + str(betw_cent.get(min(betw_cent))) + "\n\n")

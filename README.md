@@ -57,8 +57,7 @@ your finding.
 ### In Progress
 
 - [ ] Mikko on päästetty aitauksesta työskentelmään
-- [ ] continue from average degree centrality (task 2) 
-- [ ] Debugging
+- [ ] Debugging task 2 (formNetwork.py)
   - [ ] checking that the values are correct (can be done by reducing sheet.nrows = 5 and manually calculating
       - [ ] for example the average centralities are currently done wrong
   - [ ] save in a file all the centralities and draw the degree distributions (instructions 3-5)

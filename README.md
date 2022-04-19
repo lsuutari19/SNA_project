@@ -51,16 +51,13 @@ the underlined centrality measure. Identify the best matching centrality measure
 your finding.
 
 ### Todo
-- [ ] Get familiar :) w/ dataset
-- [ ] Clean the excel
+
   - [ ] Bonus: Remove incomplete lines w/ Python
-  - [ ] movie_title remove Â (last char) 
-  - [ ] imdb_score (currently 7.9 = 7.syyskuuta)
-  - [ ] Aspect_ratio
 
 ### In Progress
 
-- [ ] Mikko on päästetty aitauksesta työskentelmään 
+- [ ] Mikko on päästetty aitauksesta työskentelmään
+- [ ] continue from average degree centrality (task 2) 
 
 ### Done ✓
 
@@ -68,3 +65,5 @@ your finding.
 - [✓] Remove incomplete lines
 - [✓] Removed the odd characters at the end of movie titles
 - [✓] IMDB scores fixed
+- [✓] Get familiar :) w/ dataset
+- [✓] Clean the excel

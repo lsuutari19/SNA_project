@@ -1,2 +1,12 @@
 maximum degree centrality: 50 Cent 0.0018467220683287165
 average degree centrality: 0.0011217568621836088
+minimum degree centrality: Óscar Jaenada 0.0013850415512465374
+
+maximum eigenvector centrality: 50 Cent 0.0224447380460377
+average eigenvector centrality: 0.006054300485734942
+minimum eigenvector centrality: Óscar Jaenada 0.00997316446622362
+
+maximum betweenness centrality: 50 Cent 0.000610264524240632
+average betweenness centrality: 0.0005439237686156723
+minimum betweenness centrality: Óscar Jaenada 0.000752667711443431
+

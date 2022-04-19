@@ -5,6 +5,16 @@ import statistics
 from itertools import chain
 import pandas as pd
 
+"""
+TO DO:
+    - Debugging
+    - checking that the values are correct (can be done by reducing sheet.nrows = 5 and manually calculating
+        - for example the average centralities are currently done wrong
+    - save in a file all the centralities and draw the degree distributions (instructions 3-5)
+
+"""
+
+
 file = "./databases/NEC.xls"
 
 G = nx.Graph()
@@ -57,14 +67,29 @@ with open('results.txt', 'w') as f:
     f.write("avg path length: " + str(avg_path_len) + "\n")
 
     """
-    #maximum degree
+    #degree centralities in order of max, avg, min
     degr_cent = nx.degree_centrality(G)
-    print(degr_cent)
     f.write("maximum degree centrality: " + str(min(degr_cent)) + " " + str(degr_cent.get(min(degr_cent))) + "\n")
-
 
     avg_degr_cent = sum(degr_cent.values()) / len(degr_cent)
     f.write("average degree centrality: " + str(avg_degr_cent) + "\n")
 
+    f.write("minimum degree centrality: " + str(max(degr_cent)) + " " + str(degr_cent.get(max(degr_cent))) + "\n\n")
 
+    #eigenvector centralities in order of max, avg, min
+    eigvec_cent = nx.eigenvector_centrality(G)
+    f.write("maximum eigenvector centrality: " + str(min(eigvec_cent)) + " " + str(eigvec_cent.get(min(eigvec_cent))) + "\n")
 
+    avg_eigvec_cent = sum(eigvec_cent.values()) / len(eigvec_cent)
+    f.write("average eigenvector centrality: " + str(avg_eigvec_cent) + "\n")
+
+    f.write("minimum eigenvector centrality: " + str(max(eigvec_cent)) + " " + str(eigvec_cent.get(max(eigvec_cent))) + "\n\n")
+    
+    #betweenness centralities in order of max, avg, min
+    betw_cent = nx.betweenness_centrality(G)
+    f.write("maximum betweenness centrality: " + str(min(betw_cent)) + " " + str(betw_cent.get(min(betw_cent))) + "\n")
+
+    avg_betw_cent = sum(betw_cent.values()) / len(betw_cent)
+    f.write("average betweenness centrality: " + str(avg_betw_cent) + "\n")
+
+    f.write("minimum betweenness centrality: " + str(max(betw_cent)) + " " + str(betw_cent.get(max(betw_cent))) + "\n\n")

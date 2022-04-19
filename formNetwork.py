@@ -1,25 +1,70 @@
 import networkx as nx
 import matplotlib.pyplot as plt
 import xlrd
+import statistics
+from itertools import chain
+import pandas as pd
 
 file = "./databases/NEC.xls"
 
 G = nx.Graph()
-names = []
 
 book = xlrd.open_workbook(file)
 sheet = book.sheet_by_index(1)
 
-#columns are 6 and 10 for actor2 and actor1 respectively
-for row in range(sheet.nrows):
+# columns are 6 and 10, 14 for actor2 and actor1 and actor 3 respectively    (change 3 --> sheet.nrows when this works :D)
+for row in range(1, sheet.nrows):
     data = sheet.row_slice(row)
-    person1 = data[6].value
-    person2 = data[10].value
-    #appends a tupple person1,person2 to list
-    names.append( (person1, person2) )
+    actor1 = data[6].value
+    actor2 = data[10].value
+    actor3 = data[14].value
+    G.add_edges_from([(actor1, actor2), (actor1, actor3)])
+    G.add_edges_from([(actor2, actor3)])
 
-#print(names)
 
-G.add_edges_from(names)
-nx.draw(G, with_labels=True)
-plt.show()
+#draws the BIG CHUNGUS graph
+#nx.draw(G, with_labels=True)
+#plt.show()
+
+print("Hello World!")
+
+
+#writing the wanted information into results.txt
+with open('results.txt', 'w') as f:
+    """
+    #numb of nodes in G
+    f.write("number of nodes: " + str(G.number_of_nodes()) + "\n")
+
+    #numb of edges
+    f.write("number of edges: " + str(G.number_of_edges()) + "\n")
+
+    #clustering coefficient
+    f.write("clustering coefficient: " + str(nx.average_clustering(G)) + "\n")
+
+    #diameter
+    diameter = max([max(j.values()) for (i,j) in nx.shortest_path_length(G)])
+    f.write("diameter: " + str(diameter) + "\n")
+
+    #numb of components
+    f.write("number of components: " + str(nx.number_connected_components(G)) + "\n")
+
+    #largest component  
+    #f.write("largest component: " + str(max(nx.connected_components(G), key=len)) + "\n")
+
+    #avg path length
+    path_lengths = (j.values() for (i,j) in nx.shortest_path_length(G))
+    avg_path_len = statistics.mean(chain.from_iterable(path_lengths))
+    f.write("avg path length: " + str(avg_path_len) + "\n")
+
+    """
+    #maximum degree
+    degr_cent = nx.degree_centrality(G)
+    print(degr_cent)
+    f.write("maximum degree centrality: " + str(min(degr_cent)) + " " + str(degr_cent.get(min(degr_cent))) + "\n")
+
+
+    avg_degr_cent = sum(degr_cent.values()) / len(degr_cent)
+    f.write("average degree centrality: " + str(avg_degr_cent) + "\n")
+
+
+

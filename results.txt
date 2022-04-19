@@ -1,0 +1,2 @@
+maximum degree centrality: 50 Cent 0.0018467220683287165
+average degree centrality: 0.0011217568621836088

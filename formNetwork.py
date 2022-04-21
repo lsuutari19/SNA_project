@@ -22,7 +22,7 @@ G = nx.Graph()
 book = xlrd.open_workbook(file)
 sheet = book.sheet_by_index(1)
 
-# columns are 6 and 10, 14 for actor2 and actor1 and actor 3 respectively    (change 3 --> sheet.nrows when this works :D)
+# columns are 6 and 10, 14 for actor2 and actor1 and actor 3 respectively
 for row in range(1, sheet.nrows):
     data = sheet.row_slice(row)
     actor1 = data[6].value
@@ -93,3 +93,28 @@ with open('results.txt', 'w') as f:
     f.write("average betweenness centrality: " + str(avg_betw_cent) + "\n")
 
     f.write("minimum betweenness centrality: " + str(min(betw_cent)) + " " + str(betw_cent.get(min(betw_cent))) + "\n\n")
+
+    #degree centrality histogram
+    dc_degr_histogram = nx.degree_histogram(G)
+    dc_degrees = range(len(dc_degr_histogram))
+
+    
+    m = 3
+    plt.figure(figsize=(12,8))
+    plt.loglog(dc_degrees, dc_degr_histogram,'go-') 
+    plt.xlabel('Degree')
+    plt.ylabel('Frequency')
+    plt.savefig('degree_distribution.png')
+    plt.show()
+    """
+
+    #eigenvector centrality histogram
+    eigenvec_degr_histogram = range(len(eigvec_cent))
+    m = 3
+    plt.figure(figsize=(12,8))
+    plt.loglog(eigenvec_degr_histogram, eigvec_cent,'go-') 
+    plt.xlabel('Degree')
+    plt.ylabel('Frequency')
+    plt.savefig('eigvec_distribution.png')
+    plt.show()
+    """

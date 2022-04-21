@@ -1,3 +1,4 @@
+from ctypes import sizeof
 import networkx as nx
 import matplotlib.pyplot as plt
 import xlrd
@@ -93,13 +94,25 @@ with open('results.txt', 'w') as f:
     f.write("average betweenness centrality: " + str(avg_betw_cent) + "\n")
 
     f.write("minimum betweenness centrality: " + str(min(betw_cent)) + " " + str(betw_cent.get(min(betw_cent))) + "\n\n")
+    """
+    #write centralities to files
+    with open('degree_centralities.txt', 'w') as f1:
+        print("Writing degree centralities to a file...")
+        f1.write(str(degr_cent))
 
+    with open('eigvec_centralities.txt', 'w') as f2:
+        print("Writing eigenvector centralities to a file...")
+        f2.write(str(eigvec_cent))
+    
+    with open('betw_centralities.txt', 'w') as f3:
+        print("Writing between centralities to a file...")
+        f3.write(str(betw_cent))
+    """
     #degree centrality histogram
     dc_degr_histogram = nx.degree_histogram(G)
     dc_degrees = range(len(dc_degr_histogram))
 
-    
-    m = 3
+    """
     plt.figure(figsize=(12,8))
     plt.loglog(dc_degrees, dc_degr_histogram,'go-') 
     plt.xlabel('Degree')
@@ -109,12 +122,13 @@ with open('results.txt', 'w') as f:
     """
 
     #eigenvector centrality histogram
-    eigenvec_degr_histogram = range(len(eigvec_cent))
+    eigenvec_degrees = range(len(eigvec_cent))
+    print("This is eigenvec degr histogram", eigenvec_degrees)
+
     m = 3
     plt.figure(figsize=(12,8))
-    plt.loglog(eigenvec_degr_histogram, eigvec_cent,'go-') 
+    plt.loglog(eigenvec_degrees, dc_degr_histogram,'go-') 
     plt.xlabel('Degree')
     plt.ylabel('Frequency')
     plt.savefig('eigvec_distribution.png')
     plt.show()
-    """

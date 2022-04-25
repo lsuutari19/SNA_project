@@ -1,11 +1,15 @@
-from ctypes import sizeof
+#!/usr/bin/env python
+
+"""
+This file is for Social Network Analysis
+project work, where movie database is analysed.
+"""
+
 import networkx as nx
 import matplotlib.pyplot as plt
 import xlrd
-import statistics
-from itertools import chain
-import pandas as pd
 import numpy as np
+from constants import file, result_prefix
 
 """
 TO DO:
@@ -15,9 +19,6 @@ TO DO:
     - save in a file all the centralities and draw the degree distributions (instructions 3-5)
 
 """
-
-
-file = "./databases/NEC.xls"
 
 G = nx.Graph()
 
@@ -34,17 +35,17 @@ for row in range(1, sheet.nrows):
     G.add_edges_from([(actor1, actor2), (actor1, actor3)])
     G.add_edges_from([(actor2, actor3)])
 
-#print(nx.info(G))
+# print(nx.info(G))
 
-#draws the BIG CHUNGUS graph
-#nx.draw(G, with_labels=True)
-#plt.show()
+# draws the BIG CHUNGUS graph
+# nx.draw(G, with_labels=True)
+# plt.show()
 
 print("Starting calculations!")
 
 
-#writing the wanted information into results.txt
-with open('results.txt', 'w') as f:
+# writing the wanted information into results.txt
+with open(result_prefix + "results.txt", "w") as f:
     """
     #numb of nodes in G
     f.write("number of nodes: " + str(G.number_of_nodes()) + "\n")
@@ -62,7 +63,7 @@ with open('results.txt', 'w') as f:
     #numb of components
     f.write("number of components: " + str(nx.number_connected_components(G)) + "\n")
 
-    #largest component  
+    #largest component
     #f.write("largest component: " + str(max(nx.connected_components(G), key=len)) + "\n")
 
     #avg path length
@@ -74,6 +75,8 @@ with open('results.txt', 'w') as f:
 
     degr_cent = nx.degree_centrality(G)
     eigvec_cent = nx.eigenvector_centrality(G)
+    #    for node in eigvec_cent.values():
+    #        print(node)
     betw_cent = nx.betweenness_centrality(G)
     """
     #degree centralities in order of max, avg, min
@@ -95,45 +98,21 @@ with open('results.txt', 'w') as f:
     f.write("minimum betweenness centrality: " + str(min(betw_cent)) + " " + str(betw_cent.get(min(betw_cent))) + "\n\n")
 
     #write centralities to files
-    with open('degree_centralities.txt', 'w') as f1:
+    with open((result_prefix + 'degree_centralities.txt', 'w') as f1:
         print("Writing degree centralities to a file...")
         f1.write(str(degr_cent))
 
-    with open('eigvec_centralities.txt', 'w') as f2:
+    with open((result_prefix + 'eigvec_centralities.txt', 'w') as f2:
         print("Writing eigenvector centralities to a file...")
         f2.write(str(eigvec_cent))
     
-    with open('betw_centralities.txt', 'w') as f3:
+    with open((result_prefix + 'betw_centralities.txt', 'w') as f3:
         print("Writing between centralities to a file...")
         f3.write(str(betw_cent))
-    """
-    #degree centrality histogram
-    dc_degr_histogram = nx.degree_histogram(G)
-    dc_degrees = range(len(dc_degr_histogram))
 
     """
-    plt.figure(figsize=(12,8))
-    plt.loglog(dc_degrees, dc_degr_histogram,'go-') 
-    plt.xlabel('Degree')
-    plt.ylabel('Frequency')
-    plt.savefig('degree_distribution.png')
-    plt.show()
-    
 
-    
-    #eigenvector centrality histogram
-    eigenvec_degrees = range(len(eigvec_cent))
-    print("This is eigenvec degr histogram", eigenvec_degrees)
-
-    m = 3
-    plt.figure(figsize=(12,8))
-    plt.loglog(eigenvec_degrees, dc_degr_histogram,'go-') 
-    plt.xlabel('Degree')
-    plt.ylabel('Frequency')
-    plt.savefig('eigvec_distribution.png')
-    plt.show()
-    """
-    degree_sequence = sorted((d for n,d in G.degree()), reverse=True)
+    degree_sequence = sorted((d for n, d in G.degree()), reverse=True)
     fig = plt.figure("Degree of a random graph", figsize=(8, 8))
     axgrid = fig.add_gridspec(5, 4)
     ax = fig.add_subplot()
@@ -141,20 +120,35 @@ with open('results.txt', 'w') as f:
     ax.set_title("Degree histogram")
     ax.set_xlabel("Degree")
     ax.set_ylabel("# of Nodes")
-    plt.savefig('degree_distribution.png')
+    plt.savefig("degree_distribution.png")
     plt.show()
-    
+
     # IMPLEMENT THIS
-    """
-    eigvec_sequence = sorted((d for n,d in eigvec_cent.values()), reverse=True)
+
+    eigvec_sequence = sorted((d for d in eigvec_cent.values()), reverse=True)
+    #    input()
+    # eigvec_sequence = sorted((d for n,d in eigvec_cent.values()), reverse=True)
     fig = plt.figure("Degree of a random graph", figsize=(8, 8))
     axgrid = fig.add_gridspec(5, 4)
     ax = fig.add_subplot()
-    ax.bar(*np.unique(eigvec_sequence, return_counts=True))
+    #    ax.bar(*np.unique(eigvec_sequence, return_counts=True))
     ax.set_title("Eigenvec histogram")
     ax.set_xlabel("Degree")
     ax.set_ylabel("# of Nodes")
-    plt.savefig('eigvec_distribution.png')
+    plt.hist(eigvec_sequence, bins=100)
+    #    plt.xlim(0, 2)
+    plt.savefig("eigvec_distribution.png")
     plt.show()
-    """
 
+    betw_sequence = sorted((d for d in betw_cent.values()), reverse=True)
+    fig = plt.figure("yes: ", figsize=(8, 8))
+    axgrid = fig.add_gridspec(5, 4)
+    ax = fig.add_subplot()
+    #    ax.bar(*np.unique(eigvec_sequence, return_counts=True))
+    ax.set_title("Eigenvec histogram")
+    ax.set_xlabel("Degree")
+    ax.set_ylabel("# of Nodes")
+    plt.hist(betw_sequence, bins=100)
+    #    plt.xlim(0, 2)
+    plt.savefig("eigvec_distribution.png")
+    plt.show()

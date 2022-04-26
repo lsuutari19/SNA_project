@@ -9,9 +9,17 @@ import statistics
 from itertools import chain
 import networkx as nx
 import matplotlib.pyplot as plt
-import xlrd
 import numpy as np
-from constants import FILE, RESULTS, RESULT_PREFIX
+import xlrd
+from constants import (
+    FILE,
+    RESULTS,
+    RESULT_PREFIX,
+    BETWEENNES_FILE,
+    DEGREE_FILE,
+    EIGEN_FILE,
+    RESULTS_FILE,
+)
 from utils import generate_graph, init_result, write_result
 
 
@@ -32,16 +40,17 @@ class NetworkHandler:
         self.degr_cent = nx.degree_centrality(self.graph)
         self.eigvec_cent = nx.eigenvector_centrality(self.graph)
         self.betw_cent = nx.betweenness_centrality(self.graph)
-        init_result("betw_centralities.txt", "")
-        init_result("degree_centralities.txt", "")
-        init_result("eigveg_centralities.txt", "")
-        init_result("result.txt", "")
 
     def calculate_network_properties(self):
         """
         Calculates the basic properties of the network,
         mentioned in step 2 of the README.md instructions
         """
+        # Init result files before calculating new values
+        init_result(BETWEENNES_FILE, "")
+        init_result(DEGREE_FILE, "")
+        init_result(EIGEN_FILE, "")
+        init_result(RESULTS_FILE, "")
         # 1. Number of Nodes
         num_of_nodes = "number of nodes: " + str(self.graph.number_of_nodes()) + "\n"
         RESULTS.append(num_of_nodes)
@@ -111,7 +120,9 @@ class NetworkHandler:
             + "\n"
         )
         avg_eigvec_cent = sum(self.eigvec_cent.values()) / len(self.eigvec_cent)
-        RESULTS.append("average eigenvector centrality: " + str(avg_eigvec_cent) + "\n\n")
+        RESULTS.append(
+            "average eigenvector centrality: " + str(avg_eigvec_cent) + "\n\n"
+        )
         # 10. Betweennes centrality
         RESULTS.append(
             "minimum betweenness centrality: "
@@ -144,7 +155,6 @@ class NetworkHandler:
         """
         degree_sequence = sorted((d for n, d in self.graph.degree()), reverse=True)
         fig = plt.figure("Degree of a random graph", figsize=(8, 8))
-        #        axgrid = fig.add_gridspec(5, 4)
         x_axis = fig.add_subplot()
         x_axis.bar(*np.unique(degree_sequence, return_counts=True))
         x_axis.set_title("Degree histogram")

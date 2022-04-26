@@ -19,6 +19,9 @@ from constants import (
     DEGREE_FILE,
     EIGEN_FILE,
     RESULTS_FILE,
+    DEG_DISTR,
+    EIG_DISTR,
+    BETW_DISTR,
 )
 from utils import generate_graph, init_result, write_result
 
@@ -143,11 +146,11 @@ class NetworkHandler:
 
         # Write the RESULTS to a FILE
         for result in RESULTS:
-            write_result("result.txt", result)
+            write_result(RESULTS_FILE, result)
 
-        write_result("betw_centralities.txt", str(self.betw_cent))
-        write_result("degree_centralities.txt", str(self.degr_cent))
-        write_result("eigveg_centralities.txt", str(self.eigvec_cent))
+        write_result(BETWEENNES_FILE, str(self.betw_cent))
+        write_result(DEGREE_FILE, str(self.degr_cent))
+        write_result(EIGEN_FILE, str(self.eigvec_cent))
 
     def generate_degree_distribution_graph(self):
         """
@@ -160,7 +163,7 @@ class NetworkHandler:
         x_axis.set_title("Degree histogram")
         x_axis.set_xlabel("Degree")
         x_axis.set_ylabel("# of Nodes")
-        plt.savefig(RESULT_PREFIX + "degree_distribution.png")
+        plt.savefig(RESULT_PREFIX + DEG_DISTR)
         plt.show()
 
     def generate_eigenvector_distribution_graph(self):
@@ -174,7 +177,7 @@ class NetworkHandler:
         x_axis.set_xlabel("Degree")
         x_axis.set_ylabel("# of Nodes")
         plt.hist(eigvec_sequence, bins=100)
-        plt.savefig(RESULT_PREFIX + "eigvec_distribution.png")
+        plt.savefig(RESULT_PREFIX + EIG_DISTR)
         plt.show()
 
     def generate_betweennes_distribution_graph(self):
@@ -188,7 +191,7 @@ class NetworkHandler:
         x_axis.set_xlabel("Degree")
         x_axis.set_ylabel("# of Nodes")
         plt.hist(betw_sequence, bins=100)
-        plt.savefig(RESULT_PREFIX + "betw_distribution.png")
+        plt.savefig(RESULT_PREFIX + BETW_DISTR)
         plt.show()
 
 

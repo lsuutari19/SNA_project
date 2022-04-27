@@ -159,7 +159,7 @@ class NetworkHandler:
         degree_sequence = sorted((d for n, d in self.graph.degree()), reverse=True)
         fig = plt.figure("Degree of a random graph", figsize=(8, 8))
         x_axis = fig.add_subplot()
-        x_axis.bar(*np.unique(degree_sequence, return_counts=True))
+        x_axis.plot(*np.unique(degree_sequence, return_counts=True))
         x_axis.set_title("Degree histogram")
         x_axis.set_xlabel("Degree")
         x_axis.set_ylabel("# of Nodes")

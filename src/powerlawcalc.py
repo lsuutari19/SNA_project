@@ -33,10 +33,6 @@ def power_law(x, a, b):
     return a * np.power(x, b)
 
 
-def powlaw(x, a, b):
-    return a * np.power(x, b)
-
-
 def linlaw(x, a, b):
     return a + x * b
 

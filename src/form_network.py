@@ -23,11 +23,17 @@ from constants import (
     DEG_DISTR,
     EIG_DISTR,
     BETW_DISTR,
+<<<<<<< HEAD
     CLIQUE_FILE,
     K_CLIQUE_FILE,
     GIRVAN_FILE,
+=======
+    BETWEENNES_RANKED,
+    DEGREE_RANKED,
+    EIGEN_RANKED,
+>>>>>>> 886ebbef0df5dcbc9f2457252eb215ec446eb5ef
 )
-from utils import generate_graph, init_result, write_result
+from utils import generate_graph, init_result, write_result, sort_centralities
 
 
 
@@ -59,6 +65,9 @@ class NetworkHandler:
         init_result(DEGREE_FILE, "")
         init_result(EIGEN_FILE, "")
         init_result(RESULTS_FILE, "")
+        init_result(BETWEENNES_RANKED, "")
+        init_result(DEGREE_RANKED, "")
+        init_result(EIGEN_RANKED, "")
         # 1. Number of Nodes
         num_of_nodes = "number of nodes: " + str(self.graph.number_of_nodes()) + "\n"
         RESULTS.append(num_of_nodes)
@@ -149,6 +158,15 @@ class NetworkHandler:
         avg_betw_cent = sum(self.betw_cent.values()) / len(self.betw_cent)
         RESULTS.append("average betweenness centrality: " + str(avg_betw_cent) + "\n\n")
 
+        # Sort the centrality_data and write them to files
+        betw_sorted = sort_centralities(self.betw_cent)
+        degree_sorted = sort_centralities(self.degr_cent)
+        eigveg_sorted = sort_centralities(self.eigvec_cent)
+
+        write_result(BETWEENNES_RANKED, str(betw_sorted))
+        write_result(DEGREE_RANKED, str(degree_sorted))
+        write_result(EIGEN_RANKED, str(eigveg_sorted))
+
         # Write the RESULTS to a FILE
         for result in RESULTS:
             write_result(RESULTS_FILE, result)
@@ -213,9 +231,17 @@ def main():
     Contains all the class methods needed to generate data from the social network
     """
     network = NetworkHandler()
+<<<<<<< HEAD
     #network.generate_betweennes_distribution_graph()
     #network.generate_eigenvector_distribution_graph()
     #network.generate_degree_distribution_graph()
+=======
+    #    network.generate_betweennes_distribution_graph()
+    #    network.generate_eigenvector_distribution_graph()
+    #    network.generate_degree_distribution_graph()
+
+    network.calculate_network_properties()
+>>>>>>> 886ebbef0df5dcbc9f2457252eb215ec446eb5ef
 
     #network.calculate_network_properties()
     network.generate_communities()

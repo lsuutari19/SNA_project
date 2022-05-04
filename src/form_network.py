@@ -11,6 +11,7 @@ import networkx as nx
 import matplotlib.pyplot as plt
 import numpy as np
 import xlrd
+import networkx.algorithms.community as nxac
 from constants import (
     FILE,
     RESULTS,
@@ -22,8 +23,12 @@ from constants import (
     DEG_DISTR,
     EIG_DISTR,
     BETW_DISTR,
+    CLIQUE_FILE,
+    K_CLIQUE_FILE,
+    GIRVAN_FILE,
 )
 from utils import generate_graph, init_result, write_result
+
 
 
 class NetworkHandler:
@@ -194,6 +199,13 @@ class NetworkHandler:
         plt.savefig(RESULT_PREFIX + BETW_DISTR)
         plt.show()
 
+    def generate_communities(self):
+        # this is all the communities, calculation cliques can be done in two ways
+        # girvan newman is not possible bc of time complexity
+        #write_result(CLIQUE_FILE, str(list(nx.enumerate_all_cliques(self.graph))))
+        write_result(CLIQUE_FILE, str(list(nx.find_cliques(self.graph))))
+        write_result(K_CLIQUE_FILE, str(list(nxac.k_clique_communities(self.graph, 2))))
+        #write_result(GIRVAN_FILE, str(list(nxac.girvan_newman(self.graph))))
 
 def main():
     """
@@ -201,12 +213,12 @@ def main():
     Contains all the class methods needed to generate data from the social network
     """
     network = NetworkHandler()
-    network.generate_betweennes_distribution_graph()
-    network.generate_eigenvector_distribution_graph()
-    network.generate_degree_distribution_graph()
+    #network.generate_betweennes_distribution_graph()
+    #network.generate_eigenvector_distribution_graph()
+    #network.generate_degree_distribution_graph()
 
-    network.calculate_network_properties()
-
+    #network.calculate_network_properties()
+    network.generate_communities()
 
 if __name__ == "__main__":
     main()

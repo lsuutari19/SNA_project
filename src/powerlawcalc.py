@@ -33,12 +33,6 @@ def power_law(x, a, b):
     return a * np.power(x, b)
 
 
-# plotting(degrees)
-
-import numpy as np
-from scipy.optimize import curve_fit
-
-
 def powlaw(x, a, b):
     return a * np.power(x, b)
 

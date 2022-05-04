@@ -16,6 +16,9 @@ BETWEENNES_FILE = "betw_centralities.txt"
 DEGREE_FILE = "degree_centralities.txt"
 EIGEN_FILE = "eigveg_centralities.txt"
 RESULTS_FILE = "result.txt"
+CLIQUE_FILE = "clique_communities.txt"
+GIRVAN_FILE = "girvan_newman_communities.txt"
+K_CLIQUE_FILE = "k_clique_communities.txt"
 
 # High ranked files
 BETWEENNES_RANKED = "betw_ranked_actors.txt"

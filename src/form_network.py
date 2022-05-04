@@ -23,15 +23,12 @@ from constants import (
     DEG_DISTR,
     EIG_DISTR,
     BETW_DISTR,
-<<<<<<< HEAD
     CLIQUE_FILE,
     K_CLIQUE_FILE,
     GIRVAN_FILE,
-=======
     BETWEENNES_RANKED,
     DEGREE_RANKED,
     EIGEN_RANKED,
->>>>>>> 886ebbef0df5dcbc9f2457252eb215ec446eb5ef
 )
 from utils import generate_graph, init_result, write_result, sort_centralities
 

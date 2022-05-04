@@ -35,3 +35,19 @@ def init_result(inited_file, content):
     """
     with open(RESULT_PREFIX + inited_file, "w") as file_init:
         file_init.write(content)
+
+
+def sort_centralities(dictionary):
+    """
+    Sorts the given centrality dictionary by descending order
+    source of the implementation:
+    https://stackoverflow.com/questions/613183/how-do-i-sort-a-dictionary-by-value
+    """
+    sorted_dict = ""
+    sorted_dict = {
+        key: value
+        for key, value in sorted(
+            dictionary.items(), key=lambda item: item[1], reverse=True
+        )
+    }
+    return sorted_dict

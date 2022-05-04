@@ -228,17 +228,9 @@ def main():
     Contains all the class methods needed to generate data from the social network
     """
     network = NetworkHandler()
-<<<<<<< HEAD
     #network.generate_betweennes_distribution_graph()
     #network.generate_eigenvector_distribution_graph()
     #network.generate_degree_distribution_graph()
-=======
-    #    network.generate_betweennes_distribution_graph()
-    #    network.generate_eigenvector_distribution_graph()
-    #    network.generate_degree_distribution_graph()
-
-    network.calculate_network_properties()
->>>>>>> 886ebbef0df5dcbc9f2457252eb215ec446eb5ef
 
     #network.calculate_network_properties()
     network.generate_communities()

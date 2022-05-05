@@ -218,9 +218,14 @@ class NetworkHandler:
         # this is all the communities, calculation cliques can be done in two ways
         # girvan newman is not possible bc of time complexity
         #write_result(CLIQUE_FILE, str(list(nx.enumerate_all_cliques(self.graph))))
-        write_result(CLIQUE_FILE, str(list(nx.find_cliques(self.graph))))
-        write_result(K_CLIQUE_FILE, str(list(nxac.k_clique_communities(self.graph, 2))))
+        cliques = sorted(list(nx.find_cliques(self.graph)), reverse=True)
+        k_cliques = sorted([list(x) for x in nxac.k_clique_communities(self.graph, 5)], reverse=True)
+        #print(max(cliques, key=len))
+        #print(max(k_cliques, key=len))
+        #write_result(CLIQUE_FILE, str(cliques))
+        #write_result(K_CLIQUE_FILE, str(k_cliques))
         #write_result(GIRVAN_FILE, str(list(nxac.girvan_newman(self.graph))))
+
 
 def main():
     """

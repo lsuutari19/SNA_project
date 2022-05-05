@@ -57,10 +57,9 @@ your finding.
 ### In Progress
 
 - [ ] Mikko on päästetty aitauksesta työskentelmään
-- [ ] Debugging task 2 (formNetwork.py)
-  - [ ] checking that the values are correct (can be done by reducing sheet.nrows = 5 and manually calculating
-      - [ ] for example the average centralities are currently done wrong
-  - [ ] save in a file all the centralities and draw the degree distributions (instructions 3-5)
+- [ ] POWER LAW
+- [ ] task 7 summary?
+- [ ] task 8:ssa pitää kattoa vissii nuita eri juttuja erikseen eikä actoreita?
 ### Done ✓
 
 - [✓] 13/4/22 meeting   
@@ -69,3 +68,4 @@ your finding.
 - [✓] IMDB scores fixed
 - [✓] Get familiar :) w/ dataset
 - [✓] Clean the excel
+- [✓] task 6

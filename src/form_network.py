@@ -33,7 +33,6 @@ from constants import (
 from utils import generate_graph, init_result, write_result, sort_centralities
 
 
-
 class NetworkHandler:
     """
     Contains methods for generating information
@@ -215,16 +214,24 @@ class NetworkHandler:
         plt.show()
 
     def generate_communities(self):
+        """
+        Generate communities from the Graph
+        """
+        init_result(CLIQUE_FILE, "")
+        init_result(K_CLIQUE_FILE, "")
         # this is all the communities, calculation cliques can be done in two ways
         # girvan newman is not possible bc of time complexity
-        #write_result(CLIQUE_FILE, str(list(nx.enumerate_all_cliques(self.graph))))
+        write_result(CLIQUE_FILE, str(list(nx.enumerate_all_cliques(self.graph))))
         cliques = sorted(list(nx.find_cliques(self.graph)), reverse=True)
-        k_cliques = sorted([list(x) for x in nxac.k_clique_communities(self.graph, 5)], reverse=True)
-        #print(max(cliques, key=len))
-        #print(max(k_cliques, key=len))
-        #write_result(CLIQUE_FILE, str(cliques))
-        #write_result(K_CLIQUE_FILE, str(k_cliques))
-        #write_result(GIRVAN_FILE, str(list(nxac.girvan_newman(self.graph))))
+        k_cliques = sorted(
+            [list(x) for x in nxac.k_clique_communities(self.graph, 5)], reverse=True
+        )
+        print(max(cliques, key=len))
+        print(max(k_cliques, key=len))
+        write_result(CLIQUE_FILE, str(cliques))
+        write_result(K_CLIQUE_FILE, str(k_cliques))
+        # Commented out because of time complexity
+        # write_result(GIRVAN_FILE, str(list(nxac.girvan_newman(self.graph))))
 
 
 def main():
@@ -233,12 +240,13 @@ def main():
     Contains all the class methods needed to generate data from the social network
     """
     network = NetworkHandler()
-    #network.generate_betweennes_distribution_graph()
-    #network.generate_eigenvector_distribution_graph()
-    #network.generate_degree_distribution_graph()
+    # network.generate_betweennes_distribution_graph()
+    # network.generate_eigenvector_distribution_graph()
+    # network.generate_degree_distribution_graph()
 
-    #network.calculate_network_properties()
+    # network.calculate_network_properties()
     network.generate_communities()
+
 
 if __name__ == "__main__":
     main()

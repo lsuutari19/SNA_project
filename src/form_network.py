@@ -94,6 +94,10 @@ class NetworkHandler:
             + str(max(nx.connected_components(self.graph), key=len))
             + "\n"
         )
+        size_of_largest_component = (
+            "Size of the largest component: " + str(len(list(largest_component))) + "\n"
+        )
+        RESULTS.append(size_of_largest_component)
         RESULTS.append(largest_component)
         # 7. Average Path length
         path_lengths = (j.values() for (i, j) in nx.shortest_path_length(self.graph))
@@ -244,7 +248,7 @@ def main():
     # network.generate_eigenvector_distribution_graph()
     # network.generate_degree_distribution_graph()
 
-    # network.calculate_network_properties()
+    network.calculate_network_properties()
     network.generate_communities()
 
 

@@ -23,6 +23,7 @@ K_CLIQUE_FILE = "k_clique_communities.txt"
 # High ranked files
 BETWEENNES_RANKED = "betw_ranked_actors.txt"
 DEGREE_RANKED = "degree_ranked_actors.txt"
+DEGREE_RANKED_REAL_CENT = "real_degr_cent.txt"
 EIGEN_RANKED = "eigveg_ranked_actors.txt"
 
 # Data distribution graphs

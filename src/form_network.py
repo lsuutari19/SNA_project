@@ -13,6 +13,7 @@ import numpy as np
 import xlrd
 import networkx.algorithms.community as nxac
 from constants import (
+    DEGREE_RANKED_REAL_CENT,
     FILE,
     RESULTS,
     RESULT_PREFIX,
@@ -48,6 +49,7 @@ class NetworkHandler:
         self.sheet = self.book.sheet_by_index(1)
         generate_graph(self.graph, self.sheet)
         self.degr_cent = nx.degree_centrality(self.graph)
+        self.real_degr_cent = nx.degree(self.graph)
         self.eigvec_cent = nx.eigenvector_centrality(self.graph)
         self.betw_cent = nx.betweenness_centrality(self.graph)
 
@@ -64,6 +66,7 @@ class NetworkHandler:
         init_result(BETWEENNES_RANKED, "")
         init_result(DEGREE_RANKED, "")
         init_result(EIGEN_RANKED, "")
+        init_result(DEGREE_RANKED_REAL_CENT, "")
         # 1. Number of Nodes
         num_of_nodes = "number of nodes: " + str(self.graph.number_of_nodes()) + "\n"
         RESULTS.append(num_of_nodes)
@@ -162,6 +165,15 @@ class NetworkHandler:
         betw_sorted = sort_centralities(self.betw_cent)
         degree_sorted = sort_centralities(self.degr_cent)
         eigveg_sorted = sort_centralities(self.eigvec_cent)
+
+        sorted_real_cent = [
+            (actor, degree)
+            for (actor, degree) in sorted(
+                self.real_degr_cent, key=lambda connect: connect[1], reverse=True
+            )
+        ]
+        # Write results of Degree centrality with nx.degree()
+        write_result(DEGREE_RANKED_REAL_CENT, str(sorted_real_cent))
 
         write_result(BETWEENNES_RANKED, str(betw_sorted))
         write_result(DEGREE_RANKED, str(degree_sorted))

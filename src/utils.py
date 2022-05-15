@@ -20,6 +20,27 @@ def generate_graph(graph, datasheet):
         graph.add_edges_from([(actor1, actor2), (actor1, actor3)])
         graph.add_edges_from([(actor2, actor3)])
 
+def generate_rank_dict(datasheet):
+    """
+    columns 10 for actor, column 25 for imdb score
+    """
+    rank_dict = {}
+    rank = 0
+    count = 1
+    for row in range(1, datasheet.nrows):
+        data = datasheet.row_slice(row)
+        actor = data[10].value
+        data = data[25].value
+        data = data.replace(" ", "")
+        rank_dict[actor] = rank/count
+        if actor not in rank_dict.keys():
+            rank = 0
+            count = 1
+        rank = rank + float(data)
+        count = count + 1
+    print("Top 10 rated actors: ", {k: v for k, v in sorted(rank_dict.items(), key=lambda item: item[1], reverse=True)[:5]})
+    print("Bottom 10 rated actors: ", {k: v for k, v in sorted(rank_dict.items(), key=lambda item: item[1], reverse=False)[:5]})
+    return rank_dict
 
 def generate_genre_graph(graph, datasheet):
     """
@@ -39,8 +60,13 @@ def write_result(output_file, content):
     """
     Writes the outcome of processing into a file
     """
+
     with open(RESULT_PREFIX + output_file, "a") as file_out:
-        file_out.write(content)
+        if type(content) == dict:
+            for key, value in content.items():
+                file_out.write('%s: %s ' % (key, value))
+        else:
+            file_out.write(content)
 
 
 def init_result(inited_file, content):

@@ -5,9 +5,10 @@ for appending data
 """
 
 # Database file
-FILE = "../databases/NEC.xls"
+FILE = "databases/NEC.xls"
+FILE2 = "databases/RankingActors.xls"
 # Results folder prefix for saving results
-RESULT_PREFIX = "../results/"
+RESULT_PREFIX = "results/"
 # For saving the lines to write to results folder files
 RESULTS = []
 GENRE_RESULTS = []
@@ -21,6 +22,7 @@ CLIQUE_FILE = "clique_communities.txt"
 GIRVAN_FILE = "girvan_newman_communities.txt"
 K_CLIQUE_FILE = "k_clique_communities.txt"
 GENRES_FILE = "genre_results.txt"
+RANKS_FILE = "actor_ranks.txt"
 
 # High ranked files
 BETWEENNES_RANKED = "betw_ranked_actors.txt"

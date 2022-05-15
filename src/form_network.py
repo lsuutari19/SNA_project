@@ -15,6 +15,8 @@ import networkx.algorithms.community as nxac
 from constants import (
     DEGREE_RANKED_REAL_CENT,
     FILE,
+    GENRE_RESULTS,
+    GENRES_FILE,
     RESULTS,
     RESULT_PREFIX,
     BETWEENNES_FILE,
@@ -31,7 +33,13 @@ from constants import (
     DEGREE_RANKED,
     EIGEN_RANKED,
 )
-from utils import generate_graph, init_result, write_result, sort_centralities
+from utils import (
+    generate_graph,
+    init_result,
+    write_result,
+    sort_centralities,
+    generate_genre_graph,
+)
 
 
 class NetworkHandler:
@@ -48,10 +56,21 @@ class NetworkHandler:
         self.book = xlrd.open_workbook(FILE)
         self.sheet = self.book.sheet_by_index(1)
         generate_graph(self.graph, self.sheet)
+        generate_genre_graph(self.graph, self.sheet)
         self.degr_cent = nx.degree_centrality(self.graph)
         self.real_degr_cent = nx.degree(self.graph)
         self.eigvec_cent = nx.eigenvector_centrality(self.graph)
         self.betw_cent = nx.betweenness_centrality(self.graph)
+
+    def calculate_genre_properties(self):
+        """
+        Calculates properties for Genre graph
+        """
+        # Init results for genre graph
+        init_result(GENRES_FILE, "")
+        num_of_nodes = "number of nodes: " + str(self.graph.number_of_nodes()) + "\n"
+        GENRE_RESULTS.append(num_of_nodes)
+        write_result(GENRES_FILE, str(num_of_nodes))
 
     def calculate_network_properties(self):
         """
@@ -260,8 +279,11 @@ def main():
     # network.generate_eigenvector_distribution_graph()
     # network.generate_degree_distribution_graph()
 
-    network.calculate_network_properties()
-    network.generate_communities()
+    #    network.calculate_network_properties()
+    network.calculate_genre_properties()
+
+
+#    network.generate_communities()
 
 
 if __name__ == "__main__":

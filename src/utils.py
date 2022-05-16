@@ -6,7 +6,8 @@ Initing results files
 """
 
 from constants import RESULT_PREFIX
-
+import xlwt as xlwt
+import xlrd
 
 def generate_graph(graph, datasheet):
     """
@@ -26,26 +27,60 @@ def generate_rank_dict(datasheet):
     columns 10 for actor, column 25 for imdb score
     """
     rank_dict = {}
+    without_one_movie_stars = {}
     rank = 0
-    count = 1
+    count = 0
+    target_column = 10     # This example only has 1 column, and it is 0 indexed
+    temp_actor = "Lauri"
+
+    data = [datasheet.row_values(i) for i in range(datasheet.nrows)]
+    labels = data[0]    # Don't sort our headers
+    data = data[1:]     # Data begins on the second row
+    data.sort(key=lambda x: x[target_column])
+
+    bk = xlwt.Workbook()
+    sheet = bk.add_sheet(datasheet.name)
+
+    for idx, label in enumerate(labels):
+        sheet.write(0, idx, label)
+
+    for idx_r, row in enumerate(data):
+        for idx_c, value in enumerate(row):
+            sheet.write(idx_r+1, idx_c, value)
+    
+    bk.save('results/results.xls')
+
+    datasheet = xlrd.open_workbook('results/results.xls')
+    datasheet = datasheet.sheet_by_index(0)
     for row in range(1, datasheet.nrows):
         data = datasheet.row_slice(row)
         actor = data[10].value
         data = data[25].value
         data = data.replace(" ", "")
-        rank_dict[actor] = rank / count
         if actor not in rank_dict.keys():
-            rank = 0
-            count = 1
+            if temp_actor != actor:
+                if count == 0:
+                    count = 1
+                rank_dict[temp_actor] = rank / count
+                if count > 3:
+                    without_one_movie_stars[temp_actor] = rank / count
+                #print(temp_actor, " ", rank_dict[temp_actor])
+                rank = 0
+                count = 0
         rank = rank + float(data)
+        #print(actor, " ", rank)
         count = count + 1
+        temp_actor = actor
+    rank_dict.pop('Lauri', None)
+
     print(
         "Top 10 rated actors: ",
         {
             k: v
             for k, v in sorted(
-                rank_dict.items(), key=lambda item: item[1], reverse=True
-            )[:5]
+                #rank_dict.items(), key=lambda item: item[1], reverse=True
+                without_one_movie_stars.items(), key=lambda item: item[1], reverse=True
+            )[:10]
         },
     )
     print(
@@ -53,10 +88,12 @@ def generate_rank_dict(datasheet):
         {
             k: v
             for k, v in sorted(
-                rank_dict.items(), key=lambda item: item[1], reverse=False
-            )[:5]
+                #rank_dict.items(), key=lambda item: item[1], reverse=False
+                without_one_movie_stars.items(), key=lambda item: item[1], reverse=False
+            )[:10]
         },
     )
+    print("\n\n", rank_dict)
     return rank_dict
 
 

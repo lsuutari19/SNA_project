@@ -67,13 +67,16 @@ class NetworkHandler:
         self.eigvec_cent = nx.eigenvector_centrality(self.graph)
         self.betw_cent = nx.betweenness_centrality(self.graph)
 
-        file = open(RANKS_FILE, "r+")
+        file = open("results/" + RANKS_FILE, "r+")
         file.truncate(0)
         file.close()
         self.book2 = xlrd.open_workbook(FILE2)
         self.sheet2 = self.book2.sheet_by_index(1)
         rank_dict = generate_rank_dict(self.sheet2)
-        write_result(RANKS_FILE, {k: v for k, v in sorted(rank_dict.items(), key=lambda item: item[1])})
+        write_result(
+            RANKS_FILE,
+            {k: v for k, v in sorted(rank_dict.items(), key=lambda item: item[1])},
+        )
 
     def calculate_genre_properties(self):
         """
@@ -96,7 +99,6 @@ class NetworkHandler:
             reverse=True,
         )
         print(max(cliques, key=len))
-        print(max(k_cliques, key=len))
         write_result(GENRES_FILE, str(cliques))
 
     def calculate_network_properties(self):
@@ -143,8 +145,10 @@ class NetworkHandler:
             + str(max(nx.connected_components(self.graph), key=len))
             + "\n"
         )
+        largest_c = max(nx.connected_components(self.graph), key=len)
+        print("Olen giant: " + str(len(largest_c)))
         size_of_largest_component = (
-            "Size of the largest component: " + str(len(list(largest_component))) + "\n"
+            "Size of the largest component: " + str(len(list(largest_c))) + "\n"
         )
         RESULTS.append(size_of_largest_component)
         RESULTS.append(largest_component)
@@ -155,34 +159,22 @@ class NetworkHandler:
         RESULTS.append(average_path_length)
         # 8. Degree centrality
         RESULTS.append(
-            "minimum degree centrality: "
-            + str(max(self.degr_cent))
-            + " "
-            + str(self.degr_cent.get(max(self.degr_cent)))
-            + "\n"
+            "minimum degree centrality: " + str(min(self.degr_cent.values())) + "\n"
         )
         RESULTS.append(
-            "maximum degree centrality: "
-            + str(min(self.degr_cent))
-            + " "
-            + str(self.degr_cent.get(min(self.degr_cent)))
-            + "\n"
+            "maximum degree centrality: " + str(max(self.degr_cent.values())) + "\n"
         )
         avg_degr_cent = sum(self.degr_cent.values()) / len(self.degr_cent)
         RESULTS.append("average degree centrality: " + str(avg_degr_cent) + "\n\n")
         # 9. Eigenvector centrality
         RESULTS.append(
             "minimum eigenvector centrality: "
-            + str(min(self.eigvec_cent))
-            + " "
-            + str(self.eigvec_cent.get(min(self.eigvec_cent)))
+            + str(min(self.eigvec_cent.values()))
             + "\n"
         )
         RESULTS.append(
             "maximum eigenvector centrality: "
-            + str(max(self.eigvec_cent))
-            + " "
-            + str(self.eigvec_cent.get(max(self.eigvec_cent)))
+            + str(max(self.eigvec_cent.values()))
             + "\n"
         )
         avg_eigvec_cent = sum(self.eigvec_cent.values()) / len(self.eigvec_cent)
@@ -192,19 +184,15 @@ class NetworkHandler:
         # 10. Betweennes centrality
         RESULTS.append(
             "minimum betweenness centrality: "
-            + str(min(self.betw_cent))
-            + " "
-            + str(self.betw_cent.get(min(self.betw_cent)))
+            + str(min(self.betw_cent.values()))
             + "\n"
         )
         RESULTS.append(
             "maximum betweenness centrality: "
-            + str(max(self.betw_cent))
-            + " "
-            + str(self.betw_cent.get(max(self.betw_cent)))
+            + str(max(self.betw_cent.values()))
             + "\n"
         )
-        avg_betw_cent = sum(self.betw_cent.values()) / len(self.betw_cent)
+        avg_betw_cent = sum(self.betw_cent.values()) / len(self.betw_cent.values())
         RESULTS.append("average betweenness centrality: " + str(avg_betw_cent) + "\n\n")
 
         # Sort the centrality_data and write them to files
@@ -306,10 +294,10 @@ def main():
     # network.generate_eigenvector_distribution_graph()
     # network.generate_degree_distribution_graph()
 
-    # network.calculate_network_properties()
-    # network.calculate_genre_properties()
+    network.calculate_network_properties()
+    network.calculate_genre_properties()
 
-    # network.generate_communities()
+    network.generate_communities()
 
 
 if __name__ == "__main__":

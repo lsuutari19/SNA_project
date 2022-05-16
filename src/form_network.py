@@ -56,10 +56,11 @@ class NetworkHandler:
         Inits the class with Graph and datasheet
         """
         self.graph = nx.Graph()
+        self.genre_graph = nx.Graph()
         self.book = xlrd.open_workbook(FILE)
         self.sheet = self.book.sheet_by_index(1)
         generate_graph(self.graph, self.sheet)
-        generate_genre_graph(self.graph, self.sheet)
+        generate_genre_graph(self.genre_graph, self.sheet)
         self.degr_cent = nx.degree_centrality(self.graph)
         self.real_degr_cent = nx.degree(self.graph)
         self.eigvec_cent = nx.eigenvector_centrality(self.graph)
@@ -69,16 +70,29 @@ class NetworkHandler:
         self.sheet2 = self.book2.sheet_by_index(1)
         write_result(RANKS_FILE, generate_rank_dict(self.sheet2))
 
-
     def calculate_genre_properties(self):
         """
         Calculates properties for Genre graph
         """
         # Init results for genre graph
         init_result(GENRES_FILE, "")
-        num_of_nodes = "number of nodes: " + str(self.graph.number_of_nodes()) + "\n"
+        num_of_nodes = (
+            "number of nodes: " + str(self.genre_graph.number_of_nodes()) + "\n"
+        )
         GENRE_RESULTS.append(num_of_nodes)
         write_result(GENRES_FILE, str(num_of_nodes))
+
+        # this is all the communities, calculation cliques can be done in two ways
+        # girvan newman is not possible bc of time complexity
+        write_result(GENRES_FILE, str(list(nx.enumerate_all_cliques(self.genre_graph))))
+        cliques = sorted(list(nx.find_cliques(self.genre_graph)), reverse=True)
+        k_cliques = sorted(
+            [list(x) for x in nxac.k_clique_communities(self.genre_graph, 5)],
+            reverse=True,
+        )
+        print(max(cliques, key=len))
+        print(max(k_cliques, key=len))
+        write_result(GENRES_FILE, str(cliques))
 
     def calculate_network_properties(self):
         """
@@ -275,7 +289,7 @@ class NetworkHandler:
         write_result(K_CLIQUE_FILE, str(k_cliques))
         # Commented out because of time complexity
         # write_result(GIRVAN_FILE, str(list(nxac.girvan_newman(self.graph))))
-    
+
 
 def main():
     """
@@ -289,7 +303,6 @@ def main():
 
     # network.calculate_network_properties()
     # network.calculate_genre_properties()
-
 
     # network.generate_communities()
 

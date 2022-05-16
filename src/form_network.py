@@ -15,6 +15,9 @@ import networkx.algorithms.community as nxac
 from constants import (
     DEGREE_RANKED_REAL_CENT,
     FILE,
+    FILE2,
+    GENRE_RESULTS,
+    GENRES_FILE,
     RESULTS,
     RESULT_PREFIX,
     BETWEENNES_FILE,
@@ -30,8 +33,16 @@ from constants import (
     BETWEENNES_RANKED,
     DEGREE_RANKED,
     EIGEN_RANKED,
+    RANKS_FILE,
 )
-from utils import generate_graph, init_result, write_result, sort_centralities
+from utils import (
+    generate_graph,
+    init_result,
+    write_result,
+    sort_centralities,
+    generate_genre_graph,
+    generate_rank_dict,
+)
 
 
 class NetworkHandler:
@@ -45,13 +56,38 @@ class NetworkHandler:
         Inits the class with Graph and datasheet
         """
         self.graph = nx.Graph()
+        self.genre_graph = nx.Graph()
         self.book = xlrd.open_workbook(FILE)
         self.sheet = self.book.sheet_by_index(1)
         generate_graph(self.graph, self.sheet)
+        generate_genre_graph(self.genre_graph, self.sheet)
         self.degr_cent = nx.degree_centrality(self.graph)
         self.real_degr_cent = nx.degree(self.graph)
         self.eigvec_cent = nx.eigenvector_centrality(self.graph)
-        self.betw_cent = nx.betweenness_centrality(self.graph)
+        self.betw_cent = nx.betweenness_centrality(self.graph, normalized=True)
+
+        self.book2 = xlrd.open_workbook(FILE2)
+        self.sheet2 = self.book2.sheet_by_index(1)
+        write_result(RANKS_FILE, generate_rank_dict(self.sheet2))
+
+    def calculate_genre_properties(self):
+        """
+        Calculates properties for Genre graph
+        """
+        # Init results for genre graph
+        init_result(GENRES_FILE, "")
+        num_of_nodes = (
+            "number of nodes: " + str(self.genre_graph.number_of_nodes()) + "\n"
+        )
+        GENRE_RESULTS.append(num_of_nodes)
+        write_result(GENRES_FILE, str(num_of_nodes))
+
+        # this is all the communities, calculation cliques can be done in two ways
+        # girvan newman is not possible bc of time complexity
+        write_result(GENRES_FILE, str(list(nx.enumerate_all_cliques(self.genre_graph))))
+        cliques = sorted(list(nx.find_cliques(self.genre_graph)), reverse=True)
+        print(max(cliques, key=len))
+        write_result(GENRES_FILE, str(cliques))
 
     def calculate_network_properties(self):
         """
@@ -97,8 +133,10 @@ class NetworkHandler:
             + str(max(nx.connected_components(self.graph), key=len))
             + "\n"
         )
+        largest_c = max(nx.connected_components(self.graph), key=len)
+        print("Olen giant: " + str(len(largest_c)))
         size_of_largest_component = (
-            "Size of the largest component: " + str(len(list(largest_component))) + "\n"
+            "Size of the largest component: " + str(len(list(largest_c))) + "\n"
         )
         RESULTS.append(size_of_largest_component)
         RESULTS.append(largest_component)
@@ -146,7 +184,7 @@ class NetworkHandler:
             + str(max(self.betw_cent.values()))
             + "\n"
         )
-        avg_betw_cent = sum(self.betw_cent.values()) / len(self.betw_cent)
+        avg_betw_cent = sum(self.betw_cent.values()) / len(self.betw_cent.values())
         RESULTS.append("average betweenness centrality: " + str(avg_betw_cent) + "\n\n")
 
         # Sort the centrality_data and write them to files
@@ -250,7 +288,9 @@ def main():
     #network.generate_degree_distribution_graph()
 
     network.calculate_network_properties()
-    #network.generate_communities()
+    # network.calculate_genre_properties()
+
+    # network.generate_communities()
 
 
 if __name__ == "__main__":

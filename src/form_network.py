@@ -64,7 +64,7 @@ class NetworkHandler:
         self.degr_cent = nx.degree_centrality(self.graph)
         self.real_degr_cent = nx.degree(self.graph)
         self.eigvec_cent = nx.eigenvector_centrality(self.graph)
-        self.betw_cent = nx.betweenness_centrality(self.graph)
+        self.betw_cent = nx.betweenness_centrality(self.graph, normalized=True)
 
         self.book2 = xlrd.open_workbook(FILE2)
         self.sheet2 = self.book2.sheet_by_index(1)
@@ -196,7 +196,7 @@ class NetworkHandler:
             + str(self.betw_cent.get(max(self.betw_cent)))
             + "\n"
         )
-        avg_betw_cent = sum(self.betw_cent.values()) / len(self.betw_cent)
+        avg_betw_cent = sum(self.betw_cent.values()) / len(self.betw_cent.values())
         RESULTS.append("average betweenness centrality: " + str(avg_betw_cent) + "\n\n")
 
         # Sort the centrality_data and write them to files

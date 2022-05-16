@@ -110,16 +110,12 @@ class NetworkHandler:
         # 8. Degree centrality
         RESULTS.append(
             "minimum degree centrality: "
-            + str(max(self.degr_cent))
-            + " "
-            + str(self.degr_cent.get(max(self.degr_cent)))
+            + str(min(self.degr_cent.values()))
             + "\n"
         )
         RESULTS.append(
             "maximum degree centrality: "
-            + str(min(self.degr_cent))
-            + " "
-            + str(self.degr_cent.get(min(self.degr_cent)))
+            + str(max(self.degr_cent.values()))
             + "\n"
         )
         avg_degr_cent = sum(self.degr_cent.values()) / len(self.degr_cent)
@@ -127,16 +123,12 @@ class NetworkHandler:
         # 9. Eigenvector centrality
         RESULTS.append(
             "minimum eigenvector centrality: "
-            + str(min(self.eigvec_cent))
-            + " "
-            + str(self.eigvec_cent.get(min(self.eigvec_cent)))
+            + str(min(self.eigvec_cent.values()))
             + "\n"
         )
         RESULTS.append(
             "maximum eigenvector centrality: "
-            + str(max(self.eigvec_cent))
-            + " "
-            + str(self.eigvec_cent.get(max(self.eigvec_cent)))
+            + str(max(self.eigvec_cent.values()))
             + "\n"
         )
         avg_eigvec_cent = sum(self.eigvec_cent.values()) / len(self.eigvec_cent)
@@ -146,16 +138,12 @@ class NetworkHandler:
         # 10. Betweennes centrality
         RESULTS.append(
             "minimum betweenness centrality: "
-            + str(min(self.betw_cent))
-            + " "
-            + str(self.betw_cent.get(min(self.betw_cent)))
+            + str(min(self.betw_cent.values()))
             + "\n"
         )
         RESULTS.append(
             "maximum betweenness centrality: "
-            + str(max(self.betw_cent))
-            + " "
-            + str(self.betw_cent.get(max(self.betw_cent)))
+            + str(max(self.betw_cent.values()))
             + "\n"
         )
         avg_betw_cent = sum(self.betw_cent.values()) / len(self.betw_cent)
@@ -225,10 +213,11 @@ class NetworkHandler:
         x_axis.set_title("Betweennes histogram")
         x_axis.set_xlabel("Degree")
         x_axis.set_ylabel("# of Nodes")
-        plt.hist(betw_sequence, bins=100)
+        a = plt.hist(betw_sequence, bins=100)
+        print(a)
         plt.savefig(RESULT_PREFIX + BETW_DISTR)
         plt.show()
-
+        
     def generate_communities(self):
         """
         Generate communities from the Graph
@@ -256,12 +245,12 @@ def main():
     Contains all the class methods needed to generate data from the social network
     """
     network = NetworkHandler()
-    # network.generate_betweennes_distribution_graph()
-    # network.generate_eigenvector_distribution_graph()
-    # network.generate_degree_distribution_graph()
+    #network.generate_betweennes_distribution_graph()
+    #network.generate_eigenvector_distribution_graph()
+    #network.generate_degree_distribution_graph()
 
     network.calculate_network_properties()
-    network.generate_communities()
+    #network.generate_communities()
 
 
 if __name__ == "__main__":

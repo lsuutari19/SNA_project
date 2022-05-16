@@ -6,7 +6,8 @@ Initing results files
 """
 
 from constants import RESULT_PREFIX
-
+import xlwt as xlwt
+import xlrd
 
 def generate_graph(graph, datasheet):
     """

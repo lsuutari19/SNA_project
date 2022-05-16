@@ -86,12 +86,7 @@ class NetworkHandler:
         # girvan newman is not possible bc of time complexity
         write_result(GENRES_FILE, str(list(nx.enumerate_all_cliques(self.genre_graph))))
         cliques = sorted(list(nx.find_cliques(self.genre_graph)), reverse=True)
-        k_cliques = sorted(
-            [list(x) for x in nxac.k_clique_communities(self.genre_graph, 5)],
-            reverse=True,
-        )
         print(max(cliques, key=len))
-        print(max(k_cliques, key=len))
         write_result(GENRES_FILE, str(cliques))
 
     def calculate_network_properties(self):
@@ -138,8 +133,10 @@ class NetworkHandler:
             + str(max(nx.connected_components(self.graph), key=len))
             + "\n"
         )
+        largest_c = max(nx.connected_components(self.graph), key=len)
+        print("Olen giant: " + str(len(largest_c)))
         size_of_largest_component = (
-            "Size of the largest component: " + str(len(list(largest_component))) + "\n"
+            "Size of the largest component: " + str(len(list(largest_c))) + "\n"
         )
         RESULTS.append(size_of_largest_component)
         RESULTS.append(largest_component)
@@ -301,7 +298,7 @@ def main():
     # network.generate_eigenvector_distribution_graph()
     # network.generate_degree_distribution_graph()
 
-    # network.calculate_network_properties()
+    network.calculate_network_properties()
     # network.calculate_genre_properties()
 
     # network.generate_communities()

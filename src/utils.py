@@ -146,3 +146,10 @@ def sort_centralities(dictionary):
         )
     }
     return sorted_dict
+
+def normalize(something):
+            xmin = min(something)
+            xmax = max(something)
+            for i, x in enumerate(something):
+                something[i] = (x-xmin) / (xmax-xmin) 
+            return something

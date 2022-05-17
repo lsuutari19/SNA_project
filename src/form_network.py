@@ -12,6 +12,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import xlrd
 import networkx.algorithms.community as nxac
+from sklearn import preprocessing
 
 from constants import (
     DEGREE_RANKED_REAL_CENT,
@@ -35,6 +36,7 @@ from constants import (
     DEGREE_RANKED,
     EIGEN_RANKED,
     RANKS_FILE,
+    IMDB_DISTR,
 )
 from utils import (
     generate_graph,
@@ -43,6 +45,7 @@ from utils import (
     sort_centralities,
     generate_genre_graph,
     generate_rank_dict,
+    normalize,
 )
 
 
@@ -66,17 +69,7 @@ class NetworkHandler:
         self.real_degr_cent = nx.degree(self.graph)
         self.eigvec_cent = nx.eigenvector_centrality(self.graph)
         self.betw_cent = nx.betweenness_centrality(self.graph)
-
-        file = open("results/" + RANKS_FILE, "r+")
-        file.truncate(0)
-        file.close()
-        self.book2 = xlrd.open_workbook(FILE2)
-        self.sheet2 = self.book2.sheet_by_index(1)
-        rank_dict = generate_rank_dict(self.sheet2)
-        write_result(
-            RANKS_FILE,
-            {k: v for k, v in sorted(rank_dict.items(), key=lambda item: item[1])},
-        )
+        
 
     def calculate_genre_properties(self):
         """
@@ -282,6 +275,45 @@ class NetworkHandler:
         write_result(K_CLIQUE_FILE, str(k_cliques))
         # Commented out because of time complexity
         # write_result(GIRVAN_FILE, str(list(nxac.girvan_newman(self.graph))))
+    
+    
+
+    def actor_rankings(self):
+        file = open("results/" + RANKS_FILE, "r+")
+        file.truncate(0)
+        file.close()
+        self.book2 = xlrd.open_workbook(FILE2)
+        self.sheet2 = self.book2.sheet_by_index(1)
+        rank_dict = generate_rank_dict(self.sheet2)
+        write_result(
+            RANKS_FILE,
+            {k: v for k, v in sorted(rank_dict.items(), key=lambda item: item[1])},
+        )
+        print(len(rank_dict.keys()))
+        fig,ax = plt.subplots(figsize = (10, 7))
+        data = rank_dict.values()
+        data_list = list(data)
+        arr = np.array(data_list)
+        normalized_arr = (arr - np.min(arr) / np.max(arr) - np.min(arr)) / 10
+
+        ax.hist(normalized_arr)
+        ax.set_title("Actors normalized IMDB scores histogram")
+        ax.set_xlabel("IMDB score normalized")
+        ax.set_ylabel("# of Actors")
+        plt.savefig(RESULT_PREFIX + IMDB_DISTR)
+
+        betw_sequence = sorted((d for d in self.betw_cent.values()), reverse=True)
+        norm_betw_seq = normalize(betw_sequence)
+        plt.hist(norm_betw_seq, bins=100)
+
+        eigvec_sequence = sorted((d for d in self.eigvec_cent.values()), reverse=True)
+        norm_eigvec_seq = normalize(eigvec_sequence)
+        plt.hist(norm_eigvec_seq, bins=100)
+
+        degree_sequence = sorted((d for n, d in self.graph.degree()), reverse=True)
+        norm_degree_seq = normalize(degree_sequence)
+        plt.hist(norm_degree_seq, bins=100)
+        plt.show()
 
 
 def main():
@@ -298,7 +330,7 @@ def main():
     network.calculate_genre_properties()
 
     network.generate_communities()
-
+    network.actor_rankings()
 
 if __name__ == "__main__":
     main()

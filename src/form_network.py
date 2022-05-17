@@ -37,6 +37,7 @@ from constants import (
     EIGEN_RANKED,
     RANKS_FILE,
     IMDB_DISTR,
+    MANY_DISTR,
 )
 from utils import (
     generate_graph,
@@ -313,6 +314,7 @@ class NetworkHandler:
         degree_sequence = sorted((d for n, d in self.graph.degree()), reverse=True)
         norm_degree_seq = normalize(degree_sequence)
         plt.hist(norm_degree_seq, bins=100)
+        plt.savefig(RESULT_PREFIX + MANY_DISTR)
         plt.show()
 
 

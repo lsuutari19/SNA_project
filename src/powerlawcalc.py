@@ -24,7 +24,11 @@ def plotting(degr_seq):
     ax = fig.add_subplot()
     plt.hist(degr_seq, bins=100)
     ax.plot(
-        degr_seq, power_law(degr_seq, *pars), linestyle="--", linewidth=2, color="r"
+        degr_seq,
+        power_law(degr_seq, *pars),
+        linestyle="--",
+        linewidth=2,
+        color="r",
     )
     plt.show()
 

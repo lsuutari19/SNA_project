@@ -70,7 +70,6 @@ class NetworkHandler:
         self.real_degr_cent = nx.degree(self.graph)
         self.eigvec_cent = nx.eigenvector_centrality(self.graph)
         self.betw_cent = nx.betweenness_centrality(self.graph)
-        
 
     def calculate_genre_properties(self):
         """
@@ -86,7 +85,9 @@ class NetworkHandler:
 
         # this is all the communities, calculation cliques can be done in two ways
         # girvan newman is not possible bc of time complexity
-        write_result(GENRES_FILE, str(list(nx.enumerate_all_cliques(self.genre_graph))))
+        write_result(
+            GENRES_FILE, str(list(nx.enumerate_all_cliques(self.genre_graph)))
+        )
         cliques = sorted(list(nx.find_cliques(self.genre_graph)), reverse=True)
         k_cliques = sorted(
             [list(x) for x in nxac.k_clique_communities(self.genre_graph, 5)],
@@ -110,14 +111,20 @@ class NetworkHandler:
         init_result(EIGEN_RANKED, "")
         init_result(DEGREE_RANKED_REAL_CENT, "")
         # 1. Number of Nodes
-        num_of_nodes = "number of nodes: " + str(self.graph.number_of_nodes()) + "\n"
+        num_of_nodes = (
+            "number of nodes: " + str(self.graph.number_of_nodes()) + "\n"
+        )
         RESULTS.append(num_of_nodes)
         # 2. Number of Edges
-        num_of_edges = "number of edges: " + str(self.graph.number_of_edges()) + "\n"
+        num_of_edges = (
+            "number of edges: " + str(self.graph.number_of_edges()) + "\n"
+        )
         RESULTS.append(num_of_edges)
         # 3. Clustering coefficient
         clust_coeff = (
-            "clustering coefficient: " + str(nx.average_clustering(self.graph)) + "\n"
+            "clustering coefficient: "
+            + str(nx.average_clustering(self.graph))
+            + "\n"
         )
         RESULTS.append(clust_coeff)
         # 4. Diameter of the Graph
@@ -147,19 +154,27 @@ class NetworkHandler:
         RESULTS.append(size_of_largest_component)
         RESULTS.append(largest_component)
         # 7. Average Path length
-        path_lengths = (j.values() for (i, j) in nx.shortest_path_length(self.graph))
+        path_lengths = (
+            j.values() for (i, j) in nx.shortest_path_length(self.graph)
+        )
         avg_path_len = statistics.mean(chain.from_iterable(path_lengths))
         average_path_length = "avg path length: " + str(avg_path_len) + "\n"
         RESULTS.append(average_path_length)
         # 8. Degree centrality
         RESULTS.append(
-            "minimum degree centrality: " + str(min(self.degr_cent.values())) + "\n"
+            "minimum degree centrality: "
+            + str(min(self.degr_cent.values()))
+            + "\n"
         )
         RESULTS.append(
-            "maximum degree centrality: " + str(max(self.degr_cent.values())) + "\n"
+            "maximum degree centrality: "
+            + str(max(self.degr_cent.values()))
+            + "\n"
         )
         avg_degr_cent = sum(self.degr_cent.values()) / len(self.degr_cent)
-        RESULTS.append("average degree centrality: " + str(avg_degr_cent) + "\n\n")
+        RESULTS.append(
+            "average degree centrality: " + str(avg_degr_cent) + "\n\n"
+        )
         # 9. Eigenvector centrality
         RESULTS.append(
             "minimum eigenvector centrality: "
@@ -186,8 +201,12 @@ class NetworkHandler:
             + str(max(self.betw_cent.values()))
             + "\n"
         )
-        avg_betw_cent = sum(self.betw_cent.values()) / len(self.betw_cent.values())
-        RESULTS.append("average betweenness centrality: " + str(avg_betw_cent) + "\n\n")
+        avg_betw_cent = sum(self.betw_cent.values()) / len(
+            self.betw_cent.values()
+        )
+        RESULTS.append(
+            "average betweenness centrality: " + str(avg_betw_cent) + "\n\n"
+        )
 
         # Sort the centrality_data and write them to files
         betw_sorted = sort_centralities(self.betw_cent)
@@ -197,7 +216,9 @@ class NetworkHandler:
         sorted_real_cent = [
             (actor, degree)
             for (actor, degree) in sorted(
-                self.real_degr_cent, key=lambda connect: connect[1], reverse=True
+                self.real_degr_cent,
+                key=lambda connect: connect[1],
+                reverse=True,
             )
         ]
         # Write results of Degree centrality with nx.degree()
@@ -219,7 +240,9 @@ class NetworkHandler:
         """
         Generates degree distribution graph
         """
-        degree_sequence = sorted((d for n, d in self.graph.degree()), reverse=True)
+        degree_sequence = sorted(
+            (d for n, d in self.graph.degree()), reverse=True
+        )
         fig = plt.figure("Degree of a random graph", figsize=(8, 8))
         x_axis = fig.add_subplot()
         x_axis.plot(*np.unique(degree_sequence, return_counts=True))
@@ -233,7 +256,9 @@ class NetworkHandler:
         """
         Generates Eigenvector distribution graph
         """
-        eigvec_sequence = sorted((d for d in self.eigvec_cent.values()), reverse=True)
+        eigvec_sequence = sorted(
+            (d for d in self.eigvec_cent.values()), reverse=True
+        )
         fig = plt.figure("Degree of a random graph", figsize=(8, 8))
         x_axis = fig.add_subplot()
         x_axis.set_title("Eigenvec histogram")
@@ -247,7 +272,9 @@ class NetworkHandler:
         """
         Generates Betweennes distribution graph
         """
-        betw_sequence = sorted((d for d in self.betw_cent.values()), reverse=True)
+        betw_sequence = sorted(
+            (d for d in self.betw_cent.values()), reverse=True
+        )
         fig = plt.figure("Degree of random graph", figsize=(8, 8))
         x_axis = fig.add_subplot()
         x_axis.set_title("Betweennes histogram")
@@ -265,10 +292,13 @@ class NetworkHandler:
         init_result(K_CLIQUE_FILE, "")
         # this is all the communities, calculation cliques can be done in two ways
         # girvan newman is not possible bc of time complexity
-        write_result(CLIQUE_FILE, str(list(nx.enumerate_all_cliques(self.graph))))
+        write_result(
+            CLIQUE_FILE, str(list(nx.enumerate_all_cliques(self.graph)))
+        )
         cliques = sorted(list(nx.find_cliques(self.graph)), reverse=True)
         k_cliques = sorted(
-            [list(x) for x in nxac.k_clique_communities(self.graph, 5)], reverse=True
+            [list(x) for x in nxac.k_clique_communities(self.graph, 5)],
+            reverse=True,
         )
         print(max(cliques, key=len))
         print(max(k_cliques, key=len))
@@ -276,8 +306,6 @@ class NetworkHandler:
         write_result(K_CLIQUE_FILE, str(k_cliques))
         # Commented out because of time complexity
         # write_result(GIRVAN_FILE, str(list(nxac.girvan_newman(self.graph))))
-    
-    
 
     def actor_rankings(self):
         file = open("results/" + RANKS_FILE, "r+")
@@ -288,30 +316,39 @@ class NetworkHandler:
         rank_dict = generate_rank_dict(self.sheet2)
         write_result(
             RANKS_FILE,
-            {k: v for k, v in sorted(rank_dict.items(), key=lambda item: item[1])},
+            {
+                k: v
+                for k, v in sorted(rank_dict.items(), key=lambda item: item[1])
+            },
         )
         print(len(rank_dict.keys()))
-        fig,ax = plt.subplots(figsize = (10, 7))
+        fig, ax = plt.subplots(figsize=(10, 7))
         data = rank_dict.values()
         data_list = list(data)
         arr = np.array(data_list)
         normalized_arr = (arr - np.min(arr) / np.max(arr) - np.min(arr)) / 10
 
         ax.hist(normalized_arr)
-        ax.set_title("Actors normalized IMDB scores histogram")
-        ax.set_xlabel("IMDB score normalized")
+        ax.set_title("Actors normalized IMDb scores histogram")
+        ax.set_xlabel("IMDb score normalized")
         ax.set_ylabel("# of Actors")
         plt.savefig(RESULT_PREFIX + IMDB_DISTR)
 
-        betw_sequence = sorted((d for d in self.betw_cent.values()), reverse=True)
+        betw_sequence = sorted(
+            (d for d in self.betw_cent.values()), reverse=True
+        )
         norm_betw_seq = normalize(betw_sequence)
         plt.hist(norm_betw_seq, bins=100)
 
-        eigvec_sequence = sorted((d for d in self.eigvec_cent.values()), reverse=True)
+        eigvec_sequence = sorted(
+            (d for d in self.eigvec_cent.values()), reverse=True
+        )
         norm_eigvec_seq = normalize(eigvec_sequence)
         plt.hist(norm_eigvec_seq, bins=100)
 
-        degree_sequence = sorted((d for n, d in self.graph.degree()), reverse=True)
+        degree_sequence = sorted(
+            (d for n, d in self.graph.degree()), reverse=True
+        )
         norm_degree_seq = normalize(degree_sequence)
         plt.hist(norm_degree_seq, bins=100)
         plt.savefig(RESULT_PREFIX + MANY_DISTR)
@@ -333,6 +370,7 @@ def main():
 
     network.generate_communities()
     network.actor_rankings()
+
 
 if __name__ == "__main__":
     main()

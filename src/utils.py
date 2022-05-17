@@ -9,6 +9,7 @@ from constants import RESULT_PREFIX
 import xlwt as xlwt
 import xlrd
 
+
 def generate_graph(graph, datasheet):
     """
     columns are 6 and 10, 14 for actor2 and actor1 and actor 3 respectively
@@ -30,12 +31,12 @@ def generate_rank_dict(datasheet):
     without_one_movie_stars = {}
     rank = 0
     count = 0
-    target_column = 10     # This example only has 1 column, and it is 0 indexed
+    target_column = 10  # This example only has 1 column, and it is 0 indexed
     temp_actor = "Lauri"
 
     data = [datasheet.row_values(i) for i in range(datasheet.nrows)]
-    labels = data[0]    # Don't sort our headers
-    data = data[1:]     # Data begins on the second row
+    labels = data[0]  # Don't sort our headers
+    data = data[1:]  # Data begins on the second row
     data.sort(key=lambda x: x[target_column])
 
     bk = xlwt.Workbook()
@@ -46,11 +47,11 @@ def generate_rank_dict(datasheet):
 
     for idx_r, row in enumerate(data):
         for idx_c, value in enumerate(row):
-            sheet.write(idx_r+1, idx_c, value)
-    
-    bk.save('results/results.xls')
+            sheet.write(idx_r + 1, idx_c, value)
 
-    datasheet = xlrd.open_workbook('results/results.xls')
+    bk.save("results/results.xls")
+
+    datasheet = xlrd.open_workbook("results/results.xls")
     datasheet = datasheet.sheet_by_index(0)
     for row in range(1, datasheet.nrows):
         data = datasheet.row_slice(row)
@@ -64,22 +65,24 @@ def generate_rank_dict(datasheet):
                 rank_dict[temp_actor] = rank / count
                 if count > 3:
                     without_one_movie_stars[temp_actor] = rank / count
-                #print(temp_actor, " ", rank_dict[temp_actor])
+                # print(temp_actor, " ", rank_dict[temp_actor])
                 rank = 0
                 count = 0
         rank = rank + float(data)
-        #print(actor, " ", rank)
+        # print(actor, " ", rank)
         count = count + 1
         temp_actor = actor
-    rank_dict.pop('Lauri', None)
+    rank_dict.pop("Lauri", None)
 
     print(
         "Top 10 rated actors: ",
         {
             k: v
             for k, v in sorted(
-                #rank_dict.items(), key=lambda item: item[1], reverse=True
-                without_one_movie_stars.items(), key=lambda item: item[1], reverse=True
+                # rank_dict.items(), key=lambda item: item[1], reverse=True
+                without_one_movie_stars.items(),
+                key=lambda item: item[1],
+                reverse=True,
             )[:10]
         },
     )
@@ -88,8 +91,10 @@ def generate_rank_dict(datasheet):
         {
             k: v
             for k, v in sorted(
-                #rank_dict.items(), key=lambda item: item[1], reverse=False
-                without_one_movie_stars.items(), key=lambda item: item[1], reverse=False
+                # rank_dict.items(), key=lambda item: item[1], reverse=False
+                without_one_movie_stars.items(),
+                key=lambda item: item[1],
+                reverse=False,
             )[:10]
         },
     )
@@ -108,7 +113,9 @@ def generate_genre_graph(graph, datasheet):
         actor1 = data[6].value
         actor2 = data[10].value
         actor3 = data[14].value
-        graph.add_edges_from([(movie, actor1), (movie, actor2), (movie, actor3)])
+        graph.add_edges_from(
+            [(movie, actor1), (movie, actor2), (movie, actor3)]
+        )
 
 
 def write_result(output_file, content):
@@ -147,9 +154,10 @@ def sort_centralities(dictionary):
     }
     return sorted_dict
 
+
 def normalize(something):
-            xmin = min(something)
-            xmax = max(something)
-            for i, x in enumerate(something):
-                something[i] = (x-xmin) / (xmax-xmin) 
-            return something
+    xmin = min(something)
+    xmax = max(something)
+    for i, x in enumerate(something):
+        something[i] = (x - xmin) / (xmax - xmin)
+    return something

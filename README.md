@@ -70,5 +70,4 @@ your finding.
 - [✓] Actor rankings and communities
 - [✓] Actor centralities
 - [✓] Tasks done
-  - Task 8 a bit unclear
 - [✓] Finish the writing

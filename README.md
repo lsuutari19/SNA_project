@@ -56,10 +56,6 @@ your finding.
 
 ### In Progress
 
-- [ ] Mikko on päästetty aitauksesta työskentelmään
-- [ ] POWER LAW
-- [ ] task 7 summary?
-- [ ] task 8:ssa pitää kattoa vissii nuita eri juttuja erikseen eikä actoreita?
 ### Done ✓
 
 - [✓] 13/4/22 meeting   
@@ -68,4 +64,12 @@ your finding.
 - [✓] IMDB scores fixed
 - [✓] Get familiar :) w/ dataset
 - [✓] Clean the excel
-- [✓] task 6
+- [✓] Process and graph the dataset
+- [✓] Database properties found
+- [✓] Find literature and investigate its relation to the network
+- [✓] General methodology
+- [✓] Graphing of genres
+- [✓] Actor rankings and communities
+- [✓] Actor centralities
+- [✓] Tasks done
+- [✓] Finish the writing

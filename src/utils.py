@@ -8,7 +8,8 @@ Initing results files
 from constants import RESULT_PREFIX
 import xlwt as xlwt
 import xlrd
-
+import matplotlib.pyplot as plt
+import networkx as nx
 
 def generate_graph(graph, datasheet):
     """
@@ -98,7 +99,8 @@ def generate_rank_dict(datasheet):
             )[:10]
         },
     )
-    print("\n\n", rank_dict)
+    #uncomment for all the actor ranks
+    #print("\n\n", rank_dict)
     return rank_dict
 
 
@@ -117,6 +119,38 @@ def generate_genre_graph(graph, datasheet):
             [(movie, actor1), (movie, actor2), (movie, actor3)]
         )
 
+def generate_genre_relations(graph, datasheet):
+    genre_list = []
+    temp_list = []
+    count = 0
+    for row in range(1, datasheet.nrows):
+        data = datasheet.row_slice(row)
+        genres = data[9].value
+        #print(genres)
+        genre_list.append(genres.split('|'))
+    
+    temp = genre_list
+    temp2 = []
+    for genre in temp:
+        temp2.append(genre)
+
+    #print(temp2)
+
+    if len(temp2) > 1:
+        #print(len(lista))
+        for lista in temp2:
+            for i in lista:
+                if(len(lista) == 4):
+                    #print("Got here!")
+                    graph.add_edges_from([(lista[0], lista[1]), (lista[0], lista[2]), (lista[1], lista[2]), (lista[1], lista[3]), (lista[2], lista[3]), (lista[0], lista[3])])
+                if(len(lista) == 3):
+                    graph.add_edges_from([(lista[0], lista[1]), (lista[0], lista[2]), (lista[1], lista[2])])
+                if(len(lista) == 2):
+                    graph.add_edges_from([(lista[0], lista[1])])
+    #print(lista)
+    #print("genre graph nodes: ", graph.number_of_nodes())
+    #print("genre graph edges: ", graph.number_of_edges())
+    #graph.add_edges_from(jnejne)
 
 def write_result(output_file, content):
     """

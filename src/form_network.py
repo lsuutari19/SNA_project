@@ -47,6 +47,7 @@ from utils import (
     generate_genre_graph,
     generate_rank_dict,
     normalize,
+    generate_genre_relations,
 )
 
 
@@ -66,6 +67,7 @@ class NetworkHandler:
         self.sheet = self.book.sheet_by_index(1)
         generate_graph(self.graph, self.sheet)
         generate_genre_graph(self.genre_graph, self.sheet)
+        generate_genre_relations(self.genre_graph, self.sheet)
         self.degr_cent = nx.degree_centrality(self.graph)
         self.real_degr_cent = nx.degree(self.graph)
         self.eigvec_cent = nx.eigenvector_centrality(self.graph)
@@ -139,7 +141,7 @@ class NetworkHandler:
             + "\n"
         )
         largest_c = max(nx.connected_components(self.graph), key=len)
-        print("Olen giant: " + str(len(largest_c)))
+        print("Largest component: " + str(len(largest_c)))
         size_of_largest_component = (
             "Size of the largest component: " + str(len(list(largest_c))) + "\n"
         )
@@ -268,6 +270,15 @@ class NetworkHandler:
         # girvan newman is not possible bc of time complexity
         write_result(CLIQUE_FILE, str(list(nx.enumerate_all_cliques(self.graph))))
         cliques = sorted(list(nx.find_cliques(self.graph)), reverse=True)
+        x_axis = self.genre_graph
+        y_axis = sorted(list(nx.find_cliques(self.genre_graph)), reverse=True)
+ 
+        #print("\n\nthese are cliques: ", y_axis, "\n\n")
+        k_cliques_genres = sorted(
+            [list(x) for x in nxac.k_clique_communities(self.genre_graph, 5)],
+            reverse=True,
+        )
+        print("these are k-cliques: ", k_cliques_genres, "\n\n")
         k_cliques = sorted(
             [list(x) for x in nxac.k_clique_communities(self.graph, 5)],
             reverse=True,
@@ -325,9 +336,9 @@ def main():
     Contains all the class methods needed to generate data from the social network
     """
     network = NetworkHandler()
-    # network.generate_betweennes_distribution_graph()
-    # network.generate_eigenvector_distribution_graph()
-    # network.generate_degree_distribution_graph()
+    network.generate_betweennes_distribution_graph()
+    network.generate_eigenvector_distribution_graph()
+    network.generate_degree_distribution_graph()
 
     network.calculate_network_properties()
     network.calculate_genre_properties()
@@ -335,6 +346,7 @@ def main():
     network.generate_communities()
     network.actor_rankings()
 
+    print("\n\nCheck results folder for the results of the program.")
 
 if __name__ == "__main__":
     main()

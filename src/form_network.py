@@ -308,6 +308,7 @@ class NetworkHandler:
         arr = np.array(data_list)
         normalized_arr = (arr - np.min(arr) / np.max(arr) - np.min(arr)) / 10
 
+        #        ax.hist(normalized_arr, bins=100, label="actor rank")
         ax.hist(normalized_arr, bins=100, label="actor rank")
         ax.set_title("Normalized IMDb scores compared with normalized centralities")
         ax.set_xlabel("Normalized values")

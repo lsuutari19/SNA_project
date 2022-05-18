@@ -10,6 +10,7 @@ import xlwt as xlwt
 import xlrd
 import matplotlib.pyplot as plt
 import networkx as nx
+import collections as c
 
 def generate_graph(graph, datasheet):
     """
@@ -118,6 +119,97 @@ def generate_genre_graph(graph, datasheet):
         graph.add_edges_from(
             [(movie, actor1), (movie, actor2), (movie, actor3)]
         )
+
+def generate_budget_graph(graph, datasheet):
+    budget_list = []
+    for row in range(1, datasheet.nrows):
+        data=datasheet.row_slice(row)
+        budgets = data[22]
+        budget_list.append(budgets)
+    
+    clean_list = []
+    for i in budget_list:
+        i = str(i).replace("number:", "")
+        clean_list.append(float(i))
+    print("started graphing budgets")
+
+    num_big = 0
+    num_s_big = 0
+    num_med = 0
+    num_small = 0
+    for i in clean_list:
+        if(i >= 150000000):
+            num_big = num_big + 1
+        if(150000000 > i >= 10000000):
+            num_s_big = num_s_big + 1
+        if(10000000 > i >= 5000000):
+            num_med = num_med + 1
+        if(5000000 > i >= 0):
+            num_small = num_small + 1
+    print("\nbudget over 150000000: ", num_big, "\nbudget between 150000000 and 10000000: ",
+    num_s_big,"\nbudget between 10000000 and 5000000: ",  num_med,"\nbudget between 5000000 and 0: ", num_small)
+
+def generate_language_graph(graph, datasheet):
+    budget_list = []
+    for row in range(1, datasheet.nrows):
+        data=datasheet.row_slice(row)
+        budgets = data[20]
+        budget_list.append(budgets)
+    
+    clean_list = []
+    for i in budget_list:
+        i = str(i).replace("text:", "")
+        i = i.strip("''")
+        clean_list.append(str(i))
+    print("\nstarted graphing countries")
+    language_list = []
+    for i in clean_list:
+        language_list.append(i)
+    cnt = c.Counter()
+    for i in language_list:
+        cnt[i] += 1
+    print(cnt)
+
+    budget_list = []
+    for row in range(1, datasheet.nrows):
+        data=datasheet.row_slice(row)
+        budgets = data[21]
+        budget_list.append(budgets)
+    
+    clean_list = []
+    for i in budget_list:
+        i = str(i).replace("text:", "")
+        i = i.strip("''")
+        clean_list.append(str(i))
+    print("\nstarted graphing PGRatings")
+    language_list = []
+    for i in clean_list:
+        language_list.append(i)
+    cnt = c.Counter()
+    for i in language_list:
+        cnt[i] += 1
+    print(cnt)
+
+    budget_list = []
+    for row in range(1, datasheet.nrows):
+        data=datasheet.row_slice(row)
+        budgets = data[19]
+        budget_list.append(budgets)
+    
+    clean_list = []
+    for i in budget_list:
+        i = str(i).replace("text:", "")
+        i = i.strip("''")
+        clean_list.append(str(i))
+    print("\nstarted graphing languages")
+    language_list = []
+    for i in clean_list:
+        language_list.append(i)
+    cnt = c.Counter()
+    for i in language_list:
+        cnt[i] += 1
+    print(cnt)
+
 
 def generate_genre_relations(graph, datasheet):
     genre_list = []

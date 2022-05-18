@@ -48,6 +48,8 @@ from utils import (
     generate_rank_dict,
     normalize,
     generate_genre_relations,
+    generate_budget_graph,
+    generate_language_graph,
 )
 
 
@@ -63,11 +65,15 @@ class NetworkHandler:
         """
         self.graph = nx.Graph()
         self.genre_graph = nx.Graph()
+        self.budget_graph = nx.Graph()
+        self.language_graph = nx.Graph()
         self.book = xlrd.open_workbook(FILE)
         self.sheet = self.book.sheet_by_index(1)
         generate_graph(self.graph, self.sheet)
         generate_genre_graph(self.genre_graph, self.sheet)
         generate_genre_relations(self.genre_graph, self.sheet)
+        generate_budget_graph(self.budget_graph, self.sheet)
+        generate_language_graph(self.language_graph, self.sheet)
         self.degr_cent = nx.degree_centrality(self.graph)
         self.real_degr_cent = nx.degree(self.graph)
         self.eigvec_cent = nx.eigenvector_centrality(self.graph)

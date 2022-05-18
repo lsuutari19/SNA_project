@@ -52,8 +52,6 @@ your finding.
 
 ### Todo
 
-  - [ ] Bonus: Remove incomplete lines w/ Python
-
 ### In Progress
 
 ### Done ✓
